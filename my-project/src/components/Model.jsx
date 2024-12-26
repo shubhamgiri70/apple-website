@@ -4,6 +4,9 @@ import ModelView from "./ModelView";
 import { useRef, useState } from "react";
 import { yellowImg } from "../utils";
 import * as THREE from "three";
+import { Canvas } from "@react-three/fiber";
+import { View } from "@react-three/drei";
+import { models, sizes } from "../constants";
 
 const Model = () => {
   const [size, setSize] = useState("small");
@@ -17,7 +20,7 @@ const Model = () => {
   const cameraControlSmall = useRef();
   const cameraControlLarge = useRef();
 
-  //model
+  // model
   const small = useRef(new THREE.Group());
   const large = useRef(new THREE.Group());
 
@@ -65,10 +68,41 @@ const Model = () => {
                 right: 0,
                 overflow: "hidden",
               }}
-              eventSource={document.getElementById("root")}
             >
               <View.Port />
             </Canvas>
+          </div>
+          <div className="mx-auto w-full">
+            <p className="text-sm font-line text-center mb-5">{model.title}</p>
+            <div className="flex-center">
+              <ul className="color-container">
+                {models.map((item, i) => (
+                  <li
+                    key={i}
+                    className="w-6 h-6 rounded-full mx-2 cursor-pointer"
+                    style={{
+                      backgroundColor: model.colors?.[0] || "transparent", // Prevent crash if colors[0] is undefined
+                    }}
+                    onClick={() => setModel(item)}
+                  ></li>
+                ))}
+              </ul>
+              <div className="size-btn-container">
+                {sizes.map(({ label, value }) => (
+                  <span
+                    key={label}
+                    className="size-btn"
+                    style={{
+                      backgroundColor: size === value ? "white" : "transparent",
+                      color: size === value ? "black" : "white",
+                    }}
+                    onClick={() => setSize(value)}
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
